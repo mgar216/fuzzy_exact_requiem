@@ -25,7 +25,7 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
     for index, row in df_left.iterrows():
         if exact_columns:
             query = ''
-            for n in enumerate(exact_columns):
+            for n, _ in enumerate(exact_columns):
                 if n == 0:
                     query = f'@df_right[\'{exact_columns[n]}\'] == @row[\'{exact_columns[n]}\']'
                 else:
