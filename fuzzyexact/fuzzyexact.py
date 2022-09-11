@@ -32,7 +32,7 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
             else:
                 query += ' & @right_df[@block] == @row[@block]'
             n+=1
-        df_right_reduced = right_df.copy().query(query)
+        df_right_reduced = right_df.query(query)
      else:
         df_right_reduced = df_right.copy()
 
