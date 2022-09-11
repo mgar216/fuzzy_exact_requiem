@@ -1,7 +1,7 @@
 from fuzzywuzzy import process
 import pandas as pd
 
-def fuzzyexact(df_left, df_right, id_col=None, key=None,exact_columns=None,threshold=80):
+def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,threshold=80):
     '''Fuzzy match function which takes df1 as input and returns fuzzy matched items from df2'''
     
     #create key
@@ -33,8 +33,8 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None,exact_columns=None,thres
                 query += ' & @right_df[@block] == @row[@block]'
             n+=1
         df_right_reduced = right_df.copy().query(query)
-        else:
-            df_right_reduced = df_right.copy()
+     else:
+        df_right_reduced = df_right.copy()
 
         if len(df_right_reduced.index) > 0:
             match = process.extractOne(row['key'], df_right_reduced['key'], score_cutoff = threshold)
