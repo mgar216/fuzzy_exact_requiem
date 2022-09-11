@@ -20,7 +20,7 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
        
     
     #run fuzzy matching
-    matched = {'Match' :[], 'Score': []}
+    matched = {'Match' :[], 'Score': [], 'Exceeded': []}
 
     for index, row in df_left.iterrows():
         if exact_columns:
@@ -35,16 +35,23 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
             df_right_reduced = df_right.copy()
 
         if len(df_right_reduced.index) > 0:
-            match = process.extractOne(row['key'], df_right_reduced['key'], score_cutoff = threshold)
-            if match is not None:
+            match = process.extractOne(row['key'], df_right_reduced['key'], score_cutoff = 0)
+            if match:
                 matched['Match'].append(match[0])
                 matched['Score'].append(match[1])
+                if match[1] >= threshold:
+                    matched['Exceeded'].append(False)
+                else:
+                    matched['Exceeded'].append(True)
+
             else:
                 matched['Match'].append(0)
                 matched['Score'].append(0)
+                matched['Exceeded'].append(None)
         else:
             matched['Match'].append(0)
             matched['Score'].append(0)
+            matched['Exceeded'].append(None)
             
     matched = pd.DataFrame(matched)
 
