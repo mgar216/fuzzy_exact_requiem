@@ -23,18 +23,19 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
     matched = {'Match' :[], 'Score': []}
 
     for index, row in df_left.iterrows():
-      if exact_columns:
-        query = ''
-        n = 0
-        for block in exact_columns:
-            if n == 0:
-                query += '@right_df[@block] == @row[@block]'
-            else:
-                query += ' & @right_df[@block] == @row[@block]'
-            n+=1
-        df_right_reduced = right_df.query(query)
-     else:
-        df_right_reduced = df_right.copy()
+        if exact_columns:
+            query = ''
+            n = 0
+            for block in exact_columns:
+                str_n = str(n)
+                if n == 0:
+                    query = f'@df_right[\'{exact_columns[n]}\'] == @row[\'{exact_columns[n]}\']'
+                else:
+                    query += f' & @df_right[\'{exact_columns[n]}\'] == @row[\'{exact_columns[n]}\']'
+                n+=1
+            df_right_reduced = df_right.query(query)
+        else:
+            df_right_reduced = df_right.copy()
 
         if len(df_right_reduced.index) > 0:
             match = process.extractOne(row['key'], df_right_reduced['key'], score_cutoff = threshold)
@@ -42,11 +43,11 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
                 matched['Match'].append(match[0])
                 matched['Score'].append(match[1])
             else:
-                matched['Match'].append('')
-                matched['Score'].append('')
+                matched['Match'].append(0)
+                matched['Score'].append(0)
         else:
-            matched['Match'].append('')
-            matched['Score'].append('')
+            matched['Match'].append(0)
+            matched['Score'].append(0)
             
     matched = pd.DataFrame(matched)
 
