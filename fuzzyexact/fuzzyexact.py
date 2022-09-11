@@ -59,6 +59,6 @@ def fuzzyexact(df_left, df_right, id_col=None, key=None, exact_columns=None,thre
         ids = ids[['key', id_col]]
     
         finl = finl.merge(ids, left_on='Match', right_on='key', how='left', suffixes=('', '_y'))
-        finl.drop(['key_y'], axis=1, inplace=True)
-    
+        finl.drop(['key_y'], axis=1, inplace=True)       
+
     return finl
